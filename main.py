@@ -4,7 +4,7 @@ from mypkg.hanime_info import get_hanime1_xlifan,html_info_to_db,db_hanime_table
 from mypkg import Page
 from datetime import datetime
 from mypkg.xiban import xb_main
-from mypkg.other_download import qtfl_plxz
+from mypkg.other_download import qtfl_plxz,cj_html_ys_download
 import time
 # 刮削页数,里番,同人作品,3D动画等都会采用此配置
 Pages = Page("1").to_list()  # [1,2,3]
@@ -14,9 +14,11 @@ year = now.year
 month = now.month - 1
 NY = f"{year}{month:02d}"
 #NY = datetime.now().strftime("%Y%m")
-# 采集分类可选分类 ['新番预告','里番洗版','Motion Anime','3D动画','同人作品','MMD']
-CJFL=['新番预告','里番洗版','Motion Anime']
-#CJFL=['同人作品']
+# 采集分类可选分类 ['新番预告','里番洗版','Motion Anime','3D动画','同人作品','MMD',LF_ID]
+CJFL=['新番预告','里番洗版','Motion Anime',"LF_ID"]
+#CJFL=['LF_ID']
+# 里番id[114164,114165,114166,114167] 需要单独下载的配置hanime1的id
+LF_ID=[]
 #nfo、jpg、video文件保存路径,路径最后需要带/ （如./tmp/）
 #默认保存当前目录的年月文件夹中
 #里番保存路径
@@ -29,6 +31,7 @@ TR_3D_save_file=f"/opt/"
 if __name__ == "__main__":
     if not os.path.exists(save_file):
         os.makedirs(save_file)
+
     else:
         pass
     for CD in CJFL:
@@ -55,20 +58,39 @@ if __name__ == "__main__":
                 xb_main(NY,save_file)
                 mypkg.logger.info(f"✅️ {NY}里番洗版已完成")
             case 'Motion Anime':
+                if not os.path.exists(TR_3D_save_file+CD):
+                    os.makedirs(TR_3D_save_file+CD)
                 for x in  Pages:
                     qtfl_plxz(CD,TR_3D_save_file,x)
                 mypkg.logger.info(f"✅️ {CD} 完成")
             case '同人作品':
+                if not os.path.exists(TR_3D_save_file+CD):
+                    os.makedirs(TR_3D_save_file+CD)
                 for x in Pages:
                     qtfl_plxz(CD, TR_3D_save_file, x)
                 mypkg.logger.info(f"✅️ {CD} 完成")
             case '3D动画':
+                if not os.path.exists(TR_3D_save_file+CD):
+                    os.makedirs(TR_3D_save_file+CD)
                 for x in Pages:
                     qtfl_plxz(CD, TR_3D_save_file, x)
                 mypkg.logger.info(f"✅️ {CD} 完成")
             case 'MMD':
+                if not os.path.exists(TR_3D_save_file+CD):
+                    os.makedirs(TR_3D_save_file+CD)
                 for x in Pages:
                     qtfl_plxz(CD, TR_3D_save_file, x)
+                mypkg.logger.info(f"✅️ {CD} 完成")
+            case 'LF_ID':
+                if not os.path.exists(TR_3D_save_file+CD):
+                    os.makedirs(TR_3D_save_file+CD)
+                for idx, lf_id in enumerate(LF_ID, start=1):
+                    html_content = hanime1_id_info(lf_id)
+                    try:
+                        if cj_html_ys_download(CD, lf_id, html_content, TR_3D_save_file, idx, len(LF_ID)) == False:
+                            continue
+                    except Exception as e:
+                        mypkg.logger.error(f"❌️ 刮削{CD},id:{LF_ID}失败，原因：" + e)
                 mypkg.logger.info(f"✅️ {CD} 完成")
             case _:
                 print(f"{CD} 参数问题请检查CJFL变量")

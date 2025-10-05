@@ -9,6 +9,12 @@ import datetime
 from mypkg.playwright_html import playwright_html
 from lxml import html
 import json
+from opencc import OpenCC
+
+def traditional_to_simplified(text: str) -> str:
+    cc = OpenCC('t2s')
+    """将繁体中文转换为简体中文"""
+    return cc.convert(text)
 
 def db_insert_xzzt(LF_ID,table_name,resolution):
     table_name = table_name.replace(' ', '_')
@@ -241,13 +247,11 @@ def download_jpg(url, file_name, save_path):
     下载成功返回True，失败返回False。
     支持失败重试，最多5次，每次失败间隔5秒。
     """
+
     max_retries = 5
     for attempt in range(1, max_retries + 1):
         try:
             # 检查并创建保存路径
-            if not os.path.exists(save_path):
-                os.makedirs(save_path)
-
             # 发送HTTP GET请求获取图片数据
             response = requests.get(url, stream=True, timeout=30)
             response.raise_for_status()  # 检查HTTP请求是否成功
@@ -325,10 +329,12 @@ def cj_html_ys_download(db, lf_id, html_content,save_file,idx,idy):
         # 标签
         tags = tree.xpath('//*[@id="player-div-wrapper"]/div/div/a/text()')
         tags = filter_text(tags)
-        hanime_genre = '\n    '.join(f'<genre>{x}</genre>' for x in tags).replace('\xa0', '')
-        hanime_tags = '\n    '.join(f'<tag>{x}</tag>' for x in tags).replace('\xa0', '')
-        tags_cleaned = ','.join([''.join(t.replace('\xa0', '').split()) for t in tags if t.strip()])
-        # 内容
+        hanime_genre = '\n    '.join(f'<genre>{traditional_to_simplified(x)}</genre>' for x in tags).replace('\xa0', '')
+        hanime_tags = '\n    '.join(f'<tag>{traditional_to_simplified(x)}</tag>' for x in tags).replace('\xa0', '')
+        tags_cleaned = ','.join([
+            traditional_to_simplified(''.join(t.replace('\xa0', '').split()))
+            for t in tags if t.strip()
+        ])        # 内容
         LF_NR = tree.xpath('//*[@id="player-div-wrapper"]/div/div/div[3]/text()')#[0].replace("\n", "").replace(" ", "")
         LF_NR =filter_text(LF_NR)
         plot_text = LF_NR[0].replace("\n", "<br>\n")        #里番日期

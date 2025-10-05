@@ -9,6 +9,13 @@ import datetime
 from mypkg.playwright_html import playwright_html
 from lxml import html
 import json
+from opencc import OpenCC
+
+def traditional_to_simplified(text: str) -> str:
+    cc = OpenCC('t2s')
+    """将繁体中文转换为简体中文"""
+    return cc.convert(text)
+
 #采集内容写入数据库
 def db_hanime_info(NY, id, LF_NAME_JP, LF_NAME_CN, LF_ZZGS, LF_FSRQ, LF_NR, LF_IMG, LF_TAG):
     # 创建数据库连接
@@ -173,10 +180,6 @@ def download_jpg(url, file_name, save_path):
     max_retries = 5
     for attempt in range(1, max_retries + 1):
         try:
-            # 检查并创建保存路径
-            if not os.path.exists(save_path):
-                os.makedirs(save_path)
-
             # 发送HTTP GET请求获取图片数据
             response = requests.get(url, stream=True, timeout=30)
             response.raise_for_status()  # 检查HTTP请求是否成功
@@ -650,7 +653,10 @@ def sx_tags_db(NY, lf_id,html_content):
     LF_ZZGS = [s for s in LF_ZZGS if re.search(r'[\u4e00-\u9fff]', s)][0].replace("\n", "<br>\n")
     # 标签
     tags = tree.xpath('//*[@id="player-div-wrapper"]/div/div/a/text()')
-    tags_cleaned = ','.join([''.join(t.replace('\xa0', '').split()) for t in tags if t.strip()])
+    tags_cleaned = ','.join([
+        traditional_to_simplified(''.join(t.replace('\xa0', '').split()))
+        for t in tags if t.strip()
+    ])
     # 内容
     LF_NR = tree.xpath('//*[@id="video-artist-name"]/text()')[0].replace("\n", "").replace(" ", "")
     # 播放缩略图
