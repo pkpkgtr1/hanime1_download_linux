@@ -96,7 +96,7 @@ def download_file(url, filepath, chunk_size=1024*1024):
 
         # 如果已下载完成，直接返回
         if local_size >= total_size and total_size > 0:
-            mypkg.logger.info(f"文件已完整存在，无需重新下载: {filepath}")
+            mypkg.logger.info(f"✅ 文件已完整存在，无需重新下载: {filepath}")
             return True
 
         # 设置 Range 请求头
