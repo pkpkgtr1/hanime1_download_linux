@@ -152,15 +152,16 @@ def db_hanime_init(db, id_list):
                     heji TEXT COMMENT '合集'
                     )'''.format(str(db)))
     # 参数化查询，防止SQL注入
+    conn.commit()
     placeholders = ",".join("?" * len(id_list))
     try:
-        query = f"SELECT id FROM {db} WHERE id IN ({placeholders})"
+        query = f"SELECT id FROM '{db}' WHERE id IN ({placeholders})"
         cursor.execute(query, id_list)
         db_ids = [row[0] for row in cursor.fetchall()]
         missing_ids = list(set(id_list) - set(db_ids))
         conn.close()
         return missing_ids
-    except:
+    except Exception as e:
         mypkg.logger.error("❌️ 查询"+f'./db/{db}.db'+'失败')
 
 def db_inster_tag(db, lf_id, name_jp, name_cn, company, content,sfxz, tags,bjimg_url,LF_HEJI,resolution):
@@ -184,6 +185,7 @@ def db_inster_tag(db, lf_id, name_jp, name_cn, company, content,sfxz, tags,bjimg
                     heji TEXT COMMENT '合集'
                     )'''.format(str(db)))
         # 参数化查询，防止SQL注入
+    conn.commit()
     try:
         cursor.execute(
             """INSERT OR REPLACE INTO '{}' 
@@ -432,6 +434,7 @@ def gl_id(db, html_content):
     tree = html.fromstring(html_content)
     url_list = tree.xpath('//*[@id="home-rows-wrapper"]/div/div/div/a/@href')
     url_list = list(set(url_list))
+
     id_list = []
     for url in  url_list:
         if 'https://hanime1.me/watch?v=' in url :
@@ -441,6 +444,7 @@ def gl_id(db, html_content):
                 id_list.append(int(match.group(1)))
 
     id_list=db_hanime_init(db,id_list)
+
     del  html_content
     return id_list
 
