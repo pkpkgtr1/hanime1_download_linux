@@ -14,9 +14,9 @@ year = now.year
 month = now.month - 1
 NY = f"{year}{month:02d}"
 #NY = datetime.now().strftime("%Y%m")
-# 采集分类可选分类 ['新番预告','里番洗版','Motion Anime','3D动画','同人作品','MMD',LF_ID]
+# 采集分类可选分类 ['新番预告','里番洗版','Motion Anime','3D動畫','同人作品','MMD',LF_ID]
 CJFL=['新番预告','里番洗版','Motion Anime',"LF_ID"]
-#CJFL=['LF_ID']
+#CJFL=['3D動畫']
 # 里番id[114164,114165,114166,114167] 需要单独下载的配置hanime1的id
 LF_ID=[]
 #nfo、jpg、video文件保存路径,路径最后需要带/ （如./tmp/）
@@ -61,24 +61,28 @@ if __name__ == "__main__":
                 if not os.path.exists(TR_3D_save_file+CD):
                     os.makedirs(TR_3D_save_file+CD)
                 for x in  Pages:
+                    mypkg.logger.info(f"✅️ {CD}开始请求第{x}页")
                     qtfl_plxz(CD,TR_3D_save_file,x)
                 mypkg.logger.info(f"✅️ {CD} 完成")
             case '同人作品':
                 if not os.path.exists(TR_3D_save_file+CD):
                     os.makedirs(TR_3D_save_file+CD)
                 for x in Pages:
+                    mypkg.logger.info(f"✅️ {CD}开始请求第{x}页")
                     qtfl_plxz(CD, TR_3D_save_file, x)
                 mypkg.logger.info(f"✅️ {CD} 完成")
-            case '3D动画':
+            case '3D動畫':
                 if not os.path.exists(TR_3D_save_file+CD):
                     os.makedirs(TR_3D_save_file+CD)
                 for x in Pages:
+                    mypkg.logger.info(f"✅️ {CD}开始请求第{x}页")
                     qtfl_plxz(CD, TR_3D_save_file, x)
                 mypkg.logger.info(f"✅️ {CD} 完成")
             case 'MMD':
                 if not os.path.exists(TR_3D_save_file+CD):
                     os.makedirs(TR_3D_save_file+CD)
                 for x in Pages:
+                    mypkg.logger.info(f"✅️ {CD}开始请求第{x}页")
                     qtfl_plxz(CD, TR_3D_save_file, x)
                 mypkg.logger.info(f"✅️ {CD} 完成")
             case 'LF_ID':

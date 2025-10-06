@@ -122,7 +122,8 @@ def download_file(url, filepath, chunk_size=1024*1024):
                     f.write(chunk)
                     downloaded += len(chunk)
                     percent = downloaded * 100 / total_size
-                    print(f"\r\033[92m进度: {percent:.2f}% ({downloaded/1024/1024:.2f} MB)\033[0m", end="")
+                    print(f"\r进度: {percent:.2f}% ({downloaded/1024/1024:.2f} MB)", end="")
+        print()
         mypkg.logger.info(f"{filepath},下载完成！")
         return True
     except Exception as e:
