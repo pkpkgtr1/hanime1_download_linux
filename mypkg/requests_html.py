@@ -1,11 +1,12 @@
 import requests
-import  json
+import json
 import mypkg
 import time
 class requests_html:
 
     def get_html(self, url: str) -> str:
         max_retries = 8
+        #填写FlareSolverr地址
         FlareSolverr_url = "http://localhost:8191/v1"
         headers = {
             "Content-Type": "application/json",
