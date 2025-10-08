@@ -10,6 +10,7 @@ from mypkg.playwright_html import playwright_html
 from lxml import html
 import json
 from opencc import OpenCC
+from mypkg.requests_html import requests_html
 
 def traditional_to_simplified(text: str) -> str:
     cc = OpenCC('t2s')
@@ -72,7 +73,7 @@ def db_hanime_info(NY, id, LF_NAME_JP, LF_NAME_CN, LF_ZZGS, LF_FSRQ, LF_NR, LF_I
 
 #获取当月里番预告页html
 def get_hanime1_xlifan(NY):
-    fetcher = playwright_html()
+    fetcher = requests_html()
     mypkg.logger.info(f"⏳ 正在获取https://hanime1.me/previews/{NY}")
     html = fetcher.get_html(f"https://hanime1.me/previews/{NY}")
     if html:
@@ -528,7 +529,7 @@ def download_move_info(page):
     return LF_NAME_XP,data_urls
 
 def get_hanime1_download(LFID):
-    fetcher = playwright_html()
+    fetcher = requests_html()
     mypkg.logger.info(f"⏳ 正在获取https://hanime1.me/download?v={LFID}")
     html = fetcher.get_html(f"https://hanime1.me/download?v={LFID}")
 
@@ -597,7 +598,7 @@ def db_inster_tag(NY, lf_id, name_jp, name_cn, company, content,sfxz, tags,bjimg
             # 如果插入失败，说明ID已经存在，可以选择更新或跳过
 
 def hanime1_id_info(lf_id):
-    fetcher = playwright_html()
+    fetcher = requests_html()
     mypkg.logger.info(f"⏳ 正在获取https://hanime1.me/watch?v={lf_id}")
     html = fetcher.get_html(f"https://hanime1.me/watch?v={lf_id}")
     if html:

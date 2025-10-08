@@ -8,6 +8,7 @@ import re
 import datetime
 from mypkg.playwright_html import playwright_html
 from lxml import html
+from mypkg.requests_html import requests_html
 
 #需要洗版的里番id
 def xb_data_db(table_name):
@@ -80,7 +81,7 @@ def xb_data_db_update(table_name,lfid, new_name_cn,resolution):
 
 
 def get_hanime1_download(LFID):
-    fetcher = playwright_html()
+    fetcher = requests_html()
     mypkg.logger.info(f"⏳ 正在获取https://hanime1.me/download?v={LFID}")
     html = fetcher.get_html(f"https://hanime1.me/download?v={LFID}")
 
@@ -211,6 +212,6 @@ def xb_main(NY, save_file):
                     mypkg.logger.error(
                         f"⛔️ [{idx}/{total}]洗版错误：{lf_cn_name, lf_cn_url, match}"
                     )
-
+            time.sleep(3)
         except Exception as e:
             mypkg.logger.error(f"⚠️ [{idx}/{total}]出错：{e}")

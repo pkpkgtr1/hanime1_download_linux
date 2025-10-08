@@ -10,6 +10,7 @@ from mypkg.playwright_html import playwright_html
 from lxml import html
 import json
 from opencc import OpenCC
+from mypkg.requests_html import requests_html
 
 def traditional_to_simplified(text: str) -> str:
     cc = OpenCC('t2s')
@@ -206,7 +207,7 @@ def db_inster_tag(db, lf_id, name_jp, name_cn, company, content,sfxz, tags,bjimg
     conn.close()
 
 def get_hanime1_page_html(CX,page):
-    fetcher = playwright_html()
+    fetcher = requests_html()
     mypkg.logger.info(f"⏳ 正在查询https://hanime1.me/search?genre={CX}&page={page}")
     html = fetcher.get_html(f"https://hanime1.me/search?genre={CX}&page={page}")
     if html:
@@ -284,7 +285,7 @@ def download_jpg(url, file_name, save_path):
         time.sleep(8)
 
 def get_hanime1_download(LFID):
-    fetcher = playwright_html()
+    fetcher = requests_html()
     mypkg.logger.info(f"⏳ 正在获取https://hanime1.me/download?v={LFID}")
     html = fetcher.get_html(f"https://hanime1.me/download?v={LFID}")
 
@@ -421,7 +422,7 @@ def cj_html_ys_download(db, lf_id, html_content,save_file,idx,idy):
 
 
 def hanime1_id_info(lf_id):
-    fetcher = playwright_html()
+    fetcher = requests_html()
     mypkg.logger.info(f"⏳ 正在获取https://hanime1.me/watch?v={lf_id}")
     html = fetcher.get_html(f"https://hanime1.me/watch?v={lf_id}")
     if html:
@@ -464,9 +465,9 @@ def qtfl_plxz(db,save_file,page=1):
             try:
                 if cj_html_ys_download(db, lf_id, html_content,save_file,idx,len(id_list)) ==False:
                     continue
+                time.sleep(1)
             except Exception as e:
                 mypkg.logger.error(f"❌️ 刮削{db},id:{lf_id}失败，原因：" + e)
-
 
 
 #单个里番id下载
@@ -476,3 +477,4 @@ def dg_id_download(db,lf_id,idx,id_list,save_file):
         cj_html_ys_download(db, lf_id, html_content, save_file, idx, len(id_list))
     except Exception as e:
         mypkg.logger.error(f"❌️ 刮削{db},id:{lf_id}失败，原因：" + e)
+

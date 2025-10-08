@@ -11,7 +11,6 @@ class PageFetcher:
         )
         self.playwright = None
         self.browser = None
-
     async def _init_browser(self):
         """初始化浏览器"""
         if not self.playwright:
@@ -52,7 +51,6 @@ class PageFetcher:
                 while True:
                     await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
                     await page.wait_for_timeout(scroll_pause)
-
                     new_height = await page.evaluate("document.body.scrollHeight")
                     if new_height == last_height:
                         break

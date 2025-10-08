@@ -11,3 +11,13 @@ docker run -dit  --name hanime1_ql \
 -p 5700:5700 \
 hanime1_ql:latest
 ```
+
+### FlareSolverr
+```FlareSolverr
+docker run -d \
+  --name=flaresolverr \
+  -p 8191:8191 \
+  -e LOG_LEVEL=info \
+  --restart unless-stopped \
+  ghcr.io/flaresolverr/flaresolverr:latest
+```
