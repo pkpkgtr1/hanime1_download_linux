@@ -319,6 +319,7 @@ def filter_text(arr):
     pattern = re.compile(r"[\u4e00-\u9fff\u3040-\u30ff\u31f0-\u31ff\uFF66-\uFF9F\u3400-\u4dbfA-Za-z]")
     return [s for s in arr if pattern.search(s)]
 def cj_html_ys_download(db, lf_id, html_content,save_file,idx,idy):
+
         tree = html.fromstring(html_content)
         # 使用XPath查询匹配所有具有ID属性的div元素
         # 日文名
@@ -343,8 +344,10 @@ def cj_html_ys_download(db, lf_id, html_content,save_file,idx,idy):
         LF_NR =filter_text(LF_NR)
         plot_text = LF_NR[0].replace("\n", "<br>\n")        #里番日期
         LF_RQ= tree.xpath('//*[@id="player-div-wrapper"]/div[6]/div/div/text()')[0].replace("\n", "").replace(" ", "")
-
+        if len(LF_RQ) < 7 :
+            LF_RQ = tree.xpath('//*[@id="player-div-wrapper"]/div[7]/div/div/text()')[0].replace("\n", "").replace(" ",                                                                                                                   "")
         LF_RQ=LF_RQ.replace('\xa0', '-')
+        print(LF_RQ)
         LFGKS,LF_RQ = LF_RQ.split('--')
         # 播放缩略图
         LF_SLT =  json.loads(tree.xpath('//script[@type="application/ld+json"]/text()')[0].replace("\n", ""))['thumbnailUrl'][0]
