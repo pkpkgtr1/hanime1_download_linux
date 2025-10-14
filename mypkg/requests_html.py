@@ -7,7 +7,7 @@ class requests_html:
     def get_html(self, url: str) -> str:
         max_retries = 8
         #填写FlareSolverr地址
-        FlareSolverr_url = "http://localhost:8191/v1"
+        FlareSolverr_url = "http://192.168.11.35:8191/v1"
         headers = {
             "Content-Type": "application/json",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "

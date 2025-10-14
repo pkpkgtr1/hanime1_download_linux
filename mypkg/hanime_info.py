@@ -661,7 +661,8 @@ def sx_tags_db(NY, lf_id,html_content):
     # 内容
     LF_NR = tree.xpath('//*[@id="video-artist-name"]/text()')[0].replace("\n", "").replace(" ", "")
     # 播放缩略图
-    LF_SLT = json.loads(tree.xpath('//script[@type="application/ld+json"]/text()')[0].replace("\n", ""))['thumbnailUrl'][0]
+    #LF_SLT = json.loads(tree.xpath('//script[@type="application/ld+json"]/text()')[0].replace("\n", ""))['thumbnailUrl'][0]
+    LF_SLT = tree.xpath("//meta[@property='og:image']/@content")[0]
     # 合集
     LF_HEJI = tree.xpath('//*[@id="video-playlist-wrapper"]/div/h4[1]/text()')[0]
     for j in hj_gl:

@@ -347,10 +347,10 @@ def cj_html_ys_download(db, lf_id, html_content,save_file,idx,idy):
         if len(LF_RQ) < 7 :
             LF_RQ = tree.xpath('//*[@id="player-div-wrapper"]/div[7]/div/div/text()')[0].replace("\n", "").replace(" ",                                                                                                                   "")
         LF_RQ=LF_RQ.replace('\xa0', '-')
-        print(LF_RQ)
         LFGKS,LF_RQ = LF_RQ.split('--')
         # 播放缩略图
-        LF_SLT =  json.loads(tree.xpath('//script[@type="application/ld+json"]/text()')[0].replace("\n", ""))['thumbnailUrl'][0]
+        #LF_SLT =  json.loads(tree.xpath('//script[@type="application/ld+json"]/text()')[0].replace("\n", ""))['thumbnailUrl'][0]
+        LF_SLT = tree.xpath("//meta[@property='og:image']/@content")[0]
         # 合集
         LF_HEJI = tree.xpath('//*[@id="video-playlist-wrapper"]/div/h4[1]/text()')[0]
         show_nfo = f'''<?xml version="1.0" encoding="utf-8" standalone="yes"?>

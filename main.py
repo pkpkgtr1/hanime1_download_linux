@@ -15,7 +15,7 @@ month = now.month - 1
 NY = f"{year}{month:02d}"
 #NY = datetime.now().strftime("%Y%m")
 # 采集分类可选分类 ['新番预告','里番洗版','Motion Anime','3D動畫','同人作品','MMD',LF_ID]
-CJFL=['新番预告','里番洗版','Motion Anime']
+CJFL=['新番预告','里番洗版','Motion Anime','3D動畫']
 #CJFL=['Motion Anime']
 # 里番id[114164,114165,114166,114167] 需要单独下载的配置hanime1的id
 LF_ID=[]
