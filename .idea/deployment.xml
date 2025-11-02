@@ -5,7 +5,7 @@
       <paths name="pkpkgtr@192.168.11.35:22 password">
         <serverdata>
           <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/opt/hanime1_download_linux" local="$PROJECT_DIR$" />
           </mappings>
         </serverdata>
       </paths>

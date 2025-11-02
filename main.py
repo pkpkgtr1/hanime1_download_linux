@@ -1,6 +1,6 @@
 import mypkg
 import os
-from mypkg.hanime_info import get_hanime1_xlifan,html_info_to_db,db_hanime_table,sx_tags_db,hanime1_id_info,sx_xf_yg_tag
+from mypkg.hanime_info import get_hanime1_xlifan,html_info_to_db,db_hanime_table,sx_tags_db,hanime1_id_info,sx_xf_yg_tag,update_img_url_to_db
 from mypkg import Page
 from datetime import datetime
 from mypkg.xiban import xb_main
@@ -15,7 +15,7 @@ month = now.month - 1
 NY = f"{year}{month:02d}"
 #NY = datetime.now().strftime("%Y%m")
 # 采集分类可选分类 ['新番预告','里番洗版','Motion Anime','3D動畫','同人作品','MMD',LF_ID]
-CJFL=['新番预告','里番洗版','Motion Anime','3D動畫']
+CJFL=['新番预告','里番洗版','3D動畫']
 #CJFL=['Motion Anime']
 # 里番id[114164,114165,114166,114167] 需要单独下载的配置hanime1的id
 LF_ID=[]
@@ -45,6 +45,8 @@ if __name__ == "__main__":
                 else:
                     tables=db_hanime_table()
                     if NY in tables:
+                        html_content = get_hanime1_xlifan(NY)  # 获取html
+                        update_img_url_to_db(NY, html_content)  # 解析html元素并入库
                         mypkg.logger.info(f"🎬 {NY}月新番数据库已存在跳过数据库采集.")
                         sx_xf_yg_tag(NY)
                     else:

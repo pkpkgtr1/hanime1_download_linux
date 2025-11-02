@@ -414,10 +414,11 @@ def videos_nfo_jpg(NY,save_file):
             # print(show_nfo)
             nfo_filename = f"{safe_filename_for_linux(LF_NAME_CN)}".lstrip()
             mypkg.logger.info(f"🔄 转换字段 {LF_NAME_CN} -> {nfo_filename}")
-
+            mypkg.logger.info(f"🔄 poster图片下载地址：{LF_IMG}")
             if download_jpg(LF_IMG, img_filename + "-poster.png", save_path=save_file) == False:
                 continue
             time.sleep(1)
+            mypkg.logger.info(f"🔄 fanart图片下载地址：{bj_img_url}")
             if download_jpg(bj_img_url, img_filename + "-fanart.jpg", save_path=save_file) == False:
                 continue
             try:
@@ -688,4 +689,53 @@ def sx_xf_yg_tag(NY):
             except Exception as e:
                 mypkg.logger.error(f"❌️ 更新里番id:{LF_ID} tags失败,异常原因：{e}" )
 
+
+def db_update_url(NY, id, LF_IMG):
+    # 创建数据库连接
+    conn = sqlite3.connect('./db/hanime1.db')
+    cursor = conn.cursor()
+    ycz=[]
+    for i in range(len(LF_IMG)):
+        lf_id = id[i]
+        img_url = LF_IMG[i]
+        mypkg.logger.info(f"✅️ 里番ID：{lf_id},image_url已更新url为：{img_url}")
+        try:
+            cursor.execute('''update '{}'  SET 
+                            img_url =?
+                           where id= ? '''.format(str(NY)),
+                           (img_url,lf_id))
+
+        except sqlite3.IntegrityError:
+            # 如果插入失败，说明ID已经存在，可以选择更新或跳过
+            ycz.append(lf_id)
+
+            # 提交事务
+    conn.commit()
+
+    # 关闭连接
+    conn.close()
+
+def update_img_url_to_db(NY, html_content):
+    tree = html.fromstring(html_content)
+    # 使用XPath查询匹配所有具有ID属性的div元素
+    div_elements = tree.xpath('//div[@id]')
+
+    pure_digit_ids = []
+    for div in div_elements:
+        element_id = div.get('id')
+        if element_id is not None and element_id.isdigit():
+            pure_digit_ids.append(element_id)
+
+    # 输出结果
+    #mypkg.logger.info(f"✅️ 已成功更新image_url,里番ID：{pure_digit_ids}")
+    # 里番日文名
+
+    LF_IMG = []
+
+    for id in pure_digit_ids:
+        LF_IMG_XP = tree.xpath(f'//*[@id="{id}"]/div/div[1]/img')
+        LF_IMG.append(LF_IMG_XP[0].get('src'))
+
+
+    db_update_url(NY, pure_digit_ids, LF_IMG)
 
