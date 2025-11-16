@@ -649,7 +649,11 @@ def sx_tags_db(NY, lf_id,html_content):
     jp_name = tree.xpath('//*[@id="shareBtn-title"]/text()')[0]
     # 中文名
     cn_name = tree.xpath('//*[@id="player-div-wrapper"]/div/div/div[2]/text()')
-    cn_name = [s for s in cn_name if re.search(r'[\u4e00-\u9fff]', s)][0]
+    clean_list = [
+        s for s in cn_name
+        if s.strip() != "" and not re.match(r'^\d{2}:\d{2}$', s)
+    ]
+    cn_name = [s for s in clean_list if re.search(r'[\u4e00-\u9fff]', s)][0]
     # 制作公司
     LF_ZZGS = tree.xpath('//*[@id="player-div-wrapper"]/div/div/div[3]/text()')
     LF_ZZGS = [s for s in LF_ZZGS if re.search(r'[\u4e00-\u9fff]', s)][0].replace("\n", "<br>\n")
