@@ -210,6 +210,7 @@ def get_hanime1_page_html(CX,page):
     fetcher = requests_html()
     mypkg.logger.info(f"⏳ 正在查询https://hanime1.me/search?genre={CX}&page={page}")
     html = fetcher.get_html(f"https://hanime1.me/search?genre={CX}&page={page}")
+    mypkg.logger.debug(html)
     if html:
         if len(html) < 400:
             mypkg.logger.error("❌️ "+html)
@@ -437,9 +438,8 @@ def hanime1_id_info(lf_id):
             return html
 def gl_id(db, html_content):
     tree = html.fromstring(html_content)
-    url_list = tree.xpath('//*[@id="home-rows-wrapper"]/div/div/div/a/@href')
+    url_list = tree.xpath('//*[@id="home-rows-wrapper"]/div[3]/div/div/div/div/a/@href')
     url_list = list(set(url_list))
-
     id_list = []
     for url in  url_list:
         if 'https://hanime1.me/watch?v=' in url :
@@ -460,6 +460,7 @@ def gl_id(db, html_content):
 def qtfl_plxz(db,save_file,page=1):
     html_content = get_hanime1_page_html(db,page)         #获取html
     id_list=gl_id(db,html_content)
+    mypkg.logger.info(id_list)
     if id_list == []:
         mypkg.logger.info(f'📁 {db} 分类,未发现更新')
     else:
