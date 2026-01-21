@@ -14,8 +14,8 @@ year = now.year
 month = now.month - 1
 NY = f"{year}{month:02d}"
 #NY = datetime.now().strftime("%Y%m")
-# 采集分类可选分类 ['新番预告','里番洗版','Motion Anime','3D動畫','同人作品','MMD',LF_ID]
-CJFL=['新番预告','里番洗版','3D動畫']
+# 采集分类可选分类 ['新番预告','里番洗版','Motion Anime','3DCG','同人作品','MMD',LF_ID]
+CJFL=['新番预告','里番洗版','3DCG','Motion Anime']
 #CJFL=['Motion Anime']
 # 里番id[114164,114165,114166,114167] 需要单独下载的配置hanime1的id
 LF_ID=[]
@@ -73,7 +73,7 @@ if __name__ == "__main__":
                     mypkg.logger.info(f"✅️ {CD}开始请求第{x}页")
                     qtfl_plxz(CD, TR_3D_save_file, x)
                 mypkg.logger.info(f"✅️ {CD} 完成")
-            case '3D動畫':
+            case '3DCG':
                 if not os.path.exists(TR_3D_save_file+CD):
                     os.makedirs(TR_3D_save_file+CD)
                 for x in Pages:
@@ -99,6 +99,7 @@ if __name__ == "__main__":
                         mypkg.logger.error(f"❌️ 刮削{CD},id:{LF_ID}失败，原因：" + e)
                 mypkg.logger.info(f"✅️ {CD} 完成")
             case _:
-                print(f"{CD} 参数问题请检查CJFL变量")
+                mypkg.logger.info(f"❌️{CD} 参数问题请检查CJFL变量")
+
 
 
