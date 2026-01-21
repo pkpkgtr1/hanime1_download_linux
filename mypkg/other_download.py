@@ -460,7 +460,6 @@ def gl_id(db, html_content):
 def qtfl_plxz(db,save_file,page=1):
     html_content = get_hanime1_page_html(db,page)         #获取html
     id_list=gl_id(db,html_content)
-    mypkg.logger.info(id_list)
     if id_list == []:
         mypkg.logger.info(f'📁 {db} 分类,未发现更新')
     else:
