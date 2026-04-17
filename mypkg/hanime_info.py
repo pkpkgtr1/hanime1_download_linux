@@ -132,7 +132,6 @@ def html_info_to_db(NY, html_content):
         LF_IMG.append(LF_IMG_XP[0].get('src'))
         LF_TAG.append(LF_TAG_XP)
 
-
     db_hanime_info(NY, pure_digit_ids, LF_NAME_JP, LF_NAME_CN, LF_ZZGS, LF_FSRQ, LF_NR, LF_IMG, LF_TAG)
 
 '''
@@ -356,7 +355,7 @@ def videos_nfo_jpg(NY,save_file):
             # 背景缩略图
             bj_img_url = row[10]
             # 合集
-            LF_HEJI = row[11]
+            LF_HEJI = row[11].strip()
 
             # 标签
             tags = LF_TAG.split(',')
@@ -553,7 +552,7 @@ def db_hanime_table():
     conn.close()
     return [t[0] for t in tables]
 
-def db_inster_tag(NY, lf_id, name_jp, name_cn, company, content,sfxz, tags,bjimg_url,LF_HEJI):
+def db_inster_tag(NY, lf_id, name_jp, name_cn,sfxz, tags,bjimg_url,LF_HEJI):
     # 创建数据库连接
     conn = sqlite3.connect('./db/hanime1.db')
     cursor = conn.cursor()
@@ -578,14 +577,12 @@ def db_inster_tag(NY, lf_id, name_jp, name_cn, company, content,sfxz, tags,bjimg
             """UPDATE '{}' 
                SET name_jp = ?, 
                    name_cn = ?, 
-                   company = ?, 
-                   content = ?, 
                    tags = ? ,
                    bj_img_url =? ,
                    sfxz = ? ,
                    heji = ? 
                WHERE id = ?""".format(str(NY)),
-            (name_jp, name_cn, company, content, tags, bjimg_url,sfxz,LF_HEJI,lf_id)
+            (name_jp, name_cn, tags, bjimg_url,sfxz,LF_HEJI,lf_id)
         )
 
 
@@ -664,7 +661,7 @@ def sx_tags_db(NY, lf_id,html_content):
         for t in tags if t.strip()
     ])
     # 内容
-    LF_NR = tree.xpath('//*[@id="video-artist-name"]/text()')[0].replace("\n", "").replace(" ", "")
+    LF_NR = ''
     # 播放缩略图
     #LF_SLT = json.loads(tree.xpath('//script[@type="application/ld+json"]/text()')[0].replace("\n", ""))['thumbnailUrl'][0]
     LF_SLT = tree.xpath("//meta[@property='og:image']/@content")[0]
@@ -673,11 +670,11 @@ def sx_tags_db(NY, lf_id,html_content):
     for j in hj_gl:
         LF_HEJI=re.sub(j, '', LF_HEJI, flags=re.IGNORECASE)
     if '[新番預告]' in cn_name:
-        db_inster_tag(NY,lf_id,jp_name,cn_name,LF_NR,LF_ZZGS,None,tags_cleaned,LF_SLT,LF_HEJI)
+        db_inster_tag(NY,lf_id,jp_name,cn_name,None,tags_cleaned,LF_SLT,LF_HEJI)
     elif '[中字後補]' in cn_name:
-        db_inster_tag(NY, lf_id, jp_name, cn_name, LF_NR, LF_ZZGS, '0', tags_cleaned, LF_SLT,LF_HEJI)
+        db_inster_tag(NY, lf_id, jp_name, cn_name, '0', tags_cleaned, LF_SLT,LF_HEJI)
     else:
-        db_inster_tag(NY, lf_id, jp_name, cn_name, LF_NR, LF_ZZGS, '0', tags_cleaned, LF_SLT,LF_HEJI)
+        db_inster_tag(NY, lf_id, jp_name, cn_name, '0', tags_cleaned, LF_SLT,LF_HEJI)
 
 
 

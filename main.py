@@ -15,15 +15,15 @@ month = now.month - 1
 NY = f"{year}{month:02d}"
 #NY = datetime.now().strftime("%Y%m")
 # 采集分类可选分类 ['新番预告','里番洗版','Motion Anime','3DCG','同人作品','MMD',LF_ID]
-CJFL=['新番预告','里番洗版','3DCG','Motion Anime']
+CJFL=['新番预告','里番洗版']
 #CJFL=['Motion Anime']
 # 里番id[114164,114165,114166,114167] 需要单独下载的配置hanime1的id
-LF_ID=[]
+#LF_ID=[404721]
 #nfo、jpg、video文件保存路径,路径最后需要带/ （如./tmp/）
 #默认保存当前目录的年月文件夹中
 #里番保存路径
 #save_file=f"./Download/里番/{NY}/"
-save_file=f"/opt/里番/Hentai/2025/{NY}/"
+save_file=f"/opt/里番/Hentai/2026/{NY}/"
 #同人作品保存路径
 TR_3D_save_file=f"/opt/"
 
